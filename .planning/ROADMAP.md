@@ -31,12 +31,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Running 3+ seeds on the baseline produces mean, std, and p-value output, with std < 0.003 BPB confirming reproducibility
   4. H200-to-H100 timing ratio is empirically measured for our specific model workload (not assumed)
   5. Experiment tracking captures BPB, artifact size, training time, and hyperparameters for every run in a queryable format
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md -- Environment setup, repo clone, data download, experiment tracking, storage management
+- [ ] 01-02-PLAN.md -- Baseline training, BPB validation, artifact size checking
+- [ ] 01-03-PLAN.md -- Multi-seed evaluation, timing calibration, ablation framework
 
 ### Phase 2: SOTA Stack Integration
 **Goal**: A competitive model implementing all table-stakes techniques achieves ~1.15 BPB, matching the lower tier of leaderboard submissions
@@ -123,7 +123,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Infrastructure and Baseline | 0/3 | Not started | - |
+| 1. Infrastructure and Baseline | 0/3 | Planning complete | - |
 | 2. SOTA Stack Integration | 0/3 | Not started | - |
 | 3. Mixed-Precision Quantization | 0/2 | Not started | - |
 | 4. Differentiator Stack | 0/2 | Not started | - |
