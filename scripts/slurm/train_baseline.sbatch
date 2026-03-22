@@ -31,4 +31,26 @@ echo "Training with seed=${SEED}"
 
 torchrun --standalone --nproc_per_node=8 train_gpt.py
 
-echo "Training complete"
+TRAIN_EXIT=$?
+echo "Training complete (exit code: ${TRAIN_EXIT})"
+
+if [ ${TRAIN_EXIT} -ne 0 ]; then
+    echo "ERROR: Training failed with exit code ${TRAIN_EXIT}"
+    exit ${TRAIN_EXIT}
+fi
+
+# Post-training validation
+cd "${SLURM_SUBMIT_DIR}"
+
+# Check artifact size
+echo ""
+echo "=== Running artifact size check ==="
+python scripts/eval/check_artifact_size.py \
+    --model repo/final_model.int8.ptz \
+    --code repo/train_gpt.py
+
+# Log experiment (will need manual BPB entry or parse from training output)
+echo ""
+echo "=== Training complete. Check logs for val_bpb ==="
+echo "To validate BPB: python scripts/eval/validate_bpb.py --measured <BPB>"
+echo "To log experiment: python scripts/tracking/log_experiment.py --result-dir experiments/results --run-id baseline_seed${SEED} --val-bpb <BPB> --artifact-bytes <BYTES> --wall-time <SECONDS>"
