@@ -13,7 +13,13 @@
 
 # Environment setup
 module load miniforge/25.11.0-0 cuda/12.4.0 cudnn/9.8.0.87-cuda12
+
+# Initialize conda for this shell (required for conda activate in SLURM)
+eval "$(conda shell.bash hook)"
 conda activate pgolf
+
+echo "Python: $(which python)"
+echo "PyTorch: $(python -c 'import torch; print(torch.__version__)')"
 
 # Navigate to repo
 cd "${SLURM_SUBMIT_DIR}/repo"
