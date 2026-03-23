@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Executing Phase 02
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-03-23T03:15:13Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-03-23T03:20:15Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -24,14 +24,16 @@ See: .planning/PROJECT.md (updated 2026-03-22)
 ## Current Position
 
 Phase: 02 (sota-stack-integration) — EXECUTING
-Plan: 2 of 3 (Plan 01 complete)
+Plan: 3 of 3 (Plans 01-02 complete)
+
+Progress: [███████████████░░░░░] 5/6 plans (83%)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 4
-- Average duration: 33 min
+- Total plans completed: 5
+- Average duration: 27 min
 - Total execution time: 2.0 hours
 
 **By Phase:**
@@ -39,12 +41,12 @@ Plan: 2 of 3 (Plan 01 complete)
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-infrastructure-and-baseline | 3/3 | 115min | 38min |
-| 02-sota-stack-integration | 1/3 | 4min | 4min |
+| 02-sota-stack-integration | 2/3 | 6min | 3min |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-01 (43min), 01-02 (40min), 01-03 (32min), 02-01 (4min)
-- Trend: Accelerating sharply (architecture changes are code-only)
+- Last 5 plans: 01-02 (40min), 01-03 (32min), 02-01 (4min), 02-02 (2min)
+- Trend: Accelerating sharply (training pipeline changes are code-only)
 
 *Updated after each plan completion*
 
@@ -68,6 +70,10 @@ Recent decisions affecting current work:
 - 02-01: SmearGate after RMSNorm, BigramHash before RMSNorm (matches SOTA #1 ordering)
 - 02-01: Script at 1211 lines (under 1500 cap) with room for Plans 02-03 additions
 - 02-01: repo/ is separate git repository; architecture commits go there, planning commits go to parent
+- 02-02: Muon weight_decay hardcoded to 0.04 (not args.weight_decay) matching SOTA #1
+- 02-02: lm_head optimizer stays as Adam (not AdamW) matching SOTA #1 pattern
+- 02-02: SWA collection placed after step increment, matching SOTA #1 ordering
+- 02-02: Script at 1250 lines (under 1500 cap) with room for Plan 03 additions
 
 ### Pending Todos
 
@@ -98,6 +104,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-23T03:15:13Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-03-23T03:20:15Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
