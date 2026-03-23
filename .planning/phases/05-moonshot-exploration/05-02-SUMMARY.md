@@ -89,11 +89,22 @@ None - plan executed exactly as written.
 ## Issues Encountered
 - `repo/` is a separate git repository (gitignored in parent), so moonshot_curriculum.py was committed in the repo/ git repo rather than the parent repo
 
+## Experiment Results (SLURM Job 10823795)
+
+| Metric | Base (Phase 4) | Curriculum | Delta | Verdict |
+|--------|---------------|------------|-------|---------|
+| BPB | 1.1421 | 1.1443 | +0.0022 | NO IMPROVEMENT |
+| Artifact | 15,824,167 | 15,887,461 | +63KB | NEUTRAL |
+
+## Go/No-Go Decision: **NO-GO**
+
+Curriculum data ordering (easy-to-hard by zlib compression ratio for first 30% of training) did not improve BPB. The 600s wall-clock-limited training budget may be too short for curriculum benefits to manifest. The slight BPB regression (+0.002) suggests the technique may be counterproductive at this training scale.
+
 ## Next Phase Readiness
-- Curriculum training job submitted, awaiting results for go/no-go decision
-- If BPB improves by >= 0.001: curriculum ordering is worth integrating into the main training script
-- If BPB same or worse: document as not competitive, move on to next moonshot
+- Curriculum moonshot concluded with NO-GO
+- No changes integrated into base model
+- Data ordering techniques are not competitive for 600s training budgets
 
 ---
 *Phase: 05-moonshot-exploration*
-*Completed: 2026-03-23 (Task 1 only; Task 2 checkpoint pending)*
+*Completed: 2026-03-23*

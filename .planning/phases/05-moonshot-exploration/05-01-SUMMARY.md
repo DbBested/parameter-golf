@@ -87,11 +87,22 @@ None.
 
 None - no external service configuration required.
 
+## Experiment Results (SLURM Job 10823707)
+
+| Metric | Base (Phase 4) | Int4 MLP | Delta | Verdict |
+|--------|---------------|----------|-------|---------|
+| BPB | 1.1421 | 1.1799 | +0.0378 | FAIL (threshold: 0.003) |
+| Artifact | 15,824,167 | 14,067,344 | -1.76MB | PASS |
+| Headroom | 176KB | 1.93MB | +1.75MB | PASS |
+
+## Go/No-Go Decision: **NO-GO**
+
+Int4 (clip_range=7, 16 levels) is too aggressive for relu-squared MLP weights. BPB degradation of +0.038 is 12x the acceptable threshold. The artifact savings (1.76MB) are substantial but the quality loss is unacceptable. Int5 (32 levels) is confirmed as the optimal floor for MLP quantization at this scale.
+
 ## Next Phase Readiness
-- Awaiting SLURM job 10823707 results for go/no-go decision
-- If BPB delta < 0.003 and artifact savings > 200KB: GO (integrate int4 into base model)
-- If BPB delta >= 0.005 or no artifact size reduction: NO-GO (keep int5)
-- Results will inform whether to pursue sub-5-bit quantization further in remaining Phase 5 plans
+- Int4 moonshot concluded with NO-GO
+- Int5 remains the optimal MLP quantization level
+- No changes integrated into base model
 
 ---
 *Phase: 05-moonshot-exploration*
