@@ -2,16 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-03-23T02:43:52.669Z"
-last_activity: 2026-03-23
+status: Executing Phase 02
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-03-23T03:15:13Z"
 progress:
   total_phases: 6
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
-  percent: 100
+  total_plans: 6
+  completed_plans: 4
 ---
 
 # Project State
@@ -21,35 +19,32 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-22)
 
 **Core value:** Achieve the lowest possible BPB score within the 16MB artifact + 10-minute training constraint
-**Current focus:** Phase 01 complete -- ready for Phase 02 (SOTA Stack Integration)
+**Current focus:** Phase 02 — sota-stack-integration
 
 ## Current Position
 
-Phase: 2 of 6 (sota stack integration)
-Plan: Not started
-Status: Phase 01 complete
-Last activity: 2026-03-23
-
-Progress: [##########] 3/3 plans (100%)
+Phase: 02 (sota-stack-integration) — EXECUTING
+Plan: 2 of 3 (Plan 01 complete)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 3
-- Average duration: 38 min
-- Total execution time: 1.9 hours
+- Total plans completed: 4
+- Average duration: 33 min
+- Total execution time: 2.0 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-infrastructure-and-baseline | 3/3 | 115min | 38min |
+| 02-sota-stack-integration | 1/3 | 4min | 4min |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-01 (43min), 01-02 (40min), 01-03 (32min)
-- Trend: Accelerating
+- Last 5 plans: 01-01 (43min), 01-02 (40min), 01-03 (32min), 02-01 (4min)
+- Trend: Accelerating sharply (architecture changes are code-only)
 
 *Updated after each plan completion*
 
@@ -69,6 +64,10 @@ Recent decisions affecting current work:
 - 01-03: H200 training saturates 600s wall cap; H100 estimate 810s at 1.35x ratio (OVER BUDGET for baseline)
 - 01-03: Training time should be measured from train_gpt.py internal timer, not SLURM elapsed time
 - 01-03: Per-seed log files via tee avoid multi-seed log parsing ambiguity
+- 02-01: SOTA architecture implemented: 10L, MLP 3x, SmearGate, BigramHash(10240,128), orthogonal init
+- 02-01: SmearGate after RMSNorm, BigramHash before RMSNorm (matches SOTA #1 ordering)
+- 02-01: Script at 1211 lines (under 1500 cap) with room for Plans 02-03 additions
+- 02-01: repo/ is separate git repository; architecture commits go there, planning commits go to parent
 
 ### Pending Todos
 
@@ -78,7 +77,7 @@ None.
 
 - H200-to-H100 timing ratio 1.35x is ESTIMATED -- actual ratio unknown until RunPod validation
 - Baseline already saturates 600s H200 wall cap; H100 budget (810s estimated) means future optimizations MUST increase throughput or reduce steps
-- SmearGate implementation details not fully documented in leaderboard READMEs -- may need to extract from PR code
+- SmearGate implementation details RESOLVED -- extracted from SOTA #1 reference and implemented in 02-01
 - RunPod PyTorch version unconfirmed -- could affect torch.optim.Muon availability
 - PyTorch 2.6.0 does not include native torch.optim.Muon (needs 2.10+) -- may need KellerJordan/Muon standalone
 - Artifact size has only ~125KB margin (15.88MB of 16MB) -- int5/int6 quantization critical for Phase 2+
@@ -99,6 +98,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-23T02:28:00Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-03-23T03:15:13Z
+Stopped at: Completed 02-01-PLAN.md
 Resume file: None
