@@ -48,12 +48,12 @@ Plans:
   3. Training completes within 7 minutes on H200 (leaving margin for H100 10-minute budget)
   4. Compressed artifact (code + zstd-22 model) fits within 15,500,000 bytes (500KB safety margin)
   5. Sliding window evaluation (stride=64, context=2048) produces BPB scores matching official evaluation methodology
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
-- [ ] 02-03: TBD
+- [ ] 02-01-PLAN.md -- SOTA architecture: 10L, MLP 3x, BigramHash, SmearGate, OrthoInit, forward_logits
+- [ ] 02-02-PLAN.md -- Training pipeline: Muon WD, AdamW, SWA, parameter routing for new modules
+- [ ] 02-03-PLAN.md -- Quantization and eval: int6 PTQ, zstd-22, magnitude pruning, sliding window eval, validation run
 
 ### Phase 3: Mixed-Precision Quantization
 **Goal**: Mixed-precision quantization (int5 MLP, int6 attention, FP16 embeddings) frees artifact budget for the 10th layer and pushes BPB toward ~1.14
@@ -123,8 +123,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Infrastructure and Baseline | 1/3 | In progress | - |
-| 2. SOTA Stack Integration | 0/3 | Not started | - |
+| 1. Infrastructure and Baseline | 3/3 | Complete | 2026-03-23 |
+| 2. SOTA Stack Integration | 0/3 | Planned | - |
 | 3. Mixed-Precision Quantization | 0/2 | Not started | - |
 | 4. Differentiator Stack | 0/2 | Not started | - |
 | 5. Moonshot Exploration | 0/4 | Not started | - |
