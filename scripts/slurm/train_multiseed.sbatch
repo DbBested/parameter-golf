@@ -12,7 +12,7 @@
 #SBATCH --nodelist=node4300,node4301
 
 # Multi-seed baseline training for reproducibility evaluation
-# Runs 3 seeds sequentially, logs each, then computes multi-seed stats
+# Runs seeds sequentially, logs each to a separate file, then computes stats
 
 # Environment setup
 module load miniforge/25.11.0-0 cuda/12.4.0 cudnn/9.8.0.87-cuda12
@@ -35,7 +35,7 @@ python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}, GPUs: {torch
 export NCCL_DEBUG=WARN
 export NCCL_IB_DISABLE=0
 
-# Seeds to train
+# Seeds to train (override with SEEDS env var if desired)
 SEEDS="${SEEDS:-1337 42 7}"
 FAILED_SEEDS=""
 TOTAL_SEEDS=0
@@ -55,10 +55,13 @@ for SEED in ${SEEDS}; do
     # Record start time for this seed
     SEED_START=$(date +%s)
 
-    # Run training
+    # Create per-seed log file for clean extraction
+    SEED_LOG="${SLURM_SUBMIT_DIR}/experiments/logs/${SLURM_JOB_ID}-seed${SEED}.out"
+
+    # Run training, tee output to per-seed log
     cd "${SLURM_SUBMIT_DIR}/repo"
-    torchrun --standalone --nproc_per_node=8 train_gpt.py
-    TRAIN_EXIT=$?
+    torchrun --standalone --nproc_per_node=8 train_gpt.py 2>&1 | tee "${SEED_LOG}"
+    TRAIN_EXIT=${PIPESTATUS[0]}
 
     # Record end time
     SEED_END=$(date +%s)
@@ -84,20 +87,16 @@ for SEED in ${SEEDS}; do
         --model repo/final_model.int8.ptz \
         --code repo/train_gpt.py
 
-    # Process results from this run's log output and log experiment
+    # Process results from per-seed log file
+    # NOTE: Do NOT pass --wall-time here; let process_baseline_results extract
+    # the training time from the log (train_time:XXms), not SLURM elapsed time
     echo ""
     echo "=== Processing results for seed ${SEED} ==="
-
-    # Extract results from the SLURM log (which includes this seed's output)
-    # We need to extract BPB and timing from the log output
-    LOG_FILE="experiments/logs/${SLURM_JOB_ID}-${SLURM_JOB_NAME}.out"
-
     python scripts/eval/process_baseline_results.py \
-        --log "${LOG_FILE}" \
+        --log "${SEED_LOG}" \
         --result-dir experiments/results \
         --run-id "${RUN_ID}" \
-        --seed ${SEED} \
-        --wall-time ${SEED_WALL_TIME}
+        --seed ${SEED}
 
     # Copy model to checkpoint directory with seed-specific name
     mkdir -p checkpoints

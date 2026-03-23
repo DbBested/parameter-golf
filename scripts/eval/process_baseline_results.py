@@ -192,6 +192,7 @@ def main():
 
     # Run BPB validation
     print("\n--- BPB Validation ---")
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from validate_bpb import validate_baseline_bpb
     bpb_passed = validate_baseline_bpb(val_bpb)
 
