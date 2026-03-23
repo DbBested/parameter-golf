@@ -67,7 +67,7 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md -- Mixed int5/int6 quantization code change, per-layer MSE logging, SLURM job submission
-- [ ] 03-02-PLAN.md -- Validate training results: artifact size, BPB, sensitivity logging
+- [x] 03-02-PLAN.md -- Validate training results: artifact size, BPB, sensitivity logging
 
 ### Phase 4: Differentiator Stack
 **Goal**: Architecture enhancements (SmearGate, U-Net skips, OrthoInit) are individually ablated and the best combination is integrated, matching or beating current SOTA ~1.14 BPB
