@@ -70,18 +70,18 @@ Plans:
 - [x] 03-02-PLAN.md -- Validate training results: artifact size, BPB, sensitivity logging
 
 ### Phase 4: Differentiator Stack
-**Goal**: Architecture enhancements (SmearGate, U-Net skips, OrthoInit) are individually ablated and the best combination is integrated, matching or beating current SOTA ~1.14 BPB
+**Goal**: Verify all differentiator techniques (SmearGate, U-Net skips, OrthoInit) are present, fix the 173KB artifact size overage, and validate the model fits under 16MB with BPB <= 1.145
 **Depends on**: Phase 3
 **Requirements**: ARCH-05, ARCH-06, ARCH-07
 **Success Criteria** (what must be TRUE):
   1. SmearGate gating mechanism provides measurable BPB improvement (>0.001) over the Phase 3 model when ablated individually
   2. Each differentiator technique (SmearGate, U-Net skips, OrthoInit) has a measured marginal BPB contribution and artifact size impact
   3. The best combination of differentiators achieves BPB <= 1.145 while remaining within artifact size budget
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
+- [ ] 04-01-PLAN.md -- Verify differentiators (SmearGate, U-Net, OrthoInit), strip code comments, increase pruning to 5%
+- [ ] 04-02-PLAN.md -- Submit SLURM training job, validate artifact under 16MB and BPB <= 1.145
 
 ### Phase 5: Moonshot Exploration
 **Goal**: At least one moonshot technique (depth recurrence, TTT, curriculum learning, or sub-5-bit quantization) delivers a measurable BPB improvement beyond the optimized SOTA stack, targeting < 1.13 BPB
@@ -125,7 +125,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 |-------|----------------|--------|-----------|
 | 1. Infrastructure and Baseline | 3/3 | Complete | 2026-03-23 |
 | 2. SOTA Stack Integration | 3/3 | Complete | 2026-03-23 |
-| 3. Mixed-Precision Quantization | 1/2 | In Progress | - |
-| 4. Differentiator Stack | 0/2 | Not started | - |
+| 3. Mixed-Precision Quantization | 2/2 | Complete | 2026-03-23 |
+| 4. Differentiator Stack | 0/2 | In Progress | - |
 | 5. Moonshot Exploration | 0/4 | Not started | - |
 | 6. Submission Hardening | 0/2 | Not started | - |
