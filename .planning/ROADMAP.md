@@ -81,7 +81,7 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md -- Verify differentiators (SmearGate, U-Net, OrthoInit), strip code comments, increase pruning to 5%
-- [ ] 04-02-PLAN.md -- Submit SLURM training job, validate artifact under 16MB and BPB <= 1.145
+- [x] 04-02-PLAN.md -- Submit SLURM training job, validate artifact under 16MB and BPB <= 1.145
 
 ### Phase 5: Moonshot Exploration
 **Goal**: At least one moonshot technique (depth recurrence, TTT, curriculum learning, or sub-5-bit quantization) delivers a measurable BPB improvement beyond the optimized SOTA stack, targeting < 1.13 BPB
