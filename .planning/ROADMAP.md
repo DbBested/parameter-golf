@@ -98,7 +98,7 @@ Plans:
 - [x] 05-01-PLAN.md -- Int4 MLP quantization experiment (clip_range 15->7, one-line change)
 - [x] 05-02-PLAN.md -- Curriculum learning experiment (shard difficulty scoring, easy-to-hard ordering)
 - [x] 05-03-PLAN.md -- LoRA TTT experiment (eval-time adaptation on already-scored tokens)
-- [ ] 05-04-PLAN.md -- Depth recurrence experiment (5 blocks x 2 loops, Huginn-style adapter re-injection)
+- [x] 05-04-PLAN.md -- Depth recurrence experiment (5 blocks x 2 loops, Huginn-style adapter re-injection)
 
 ### Phase 6: Submission Hardening
 **Goal**: The final model is validated as reproducible, rule-compliant, and competition-ready with a complete submission package tested on RunPod 8xH100
