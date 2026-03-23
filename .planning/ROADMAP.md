@@ -80,7 +80,7 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md -- Verify differentiators (SmearGate, U-Net, OrthoInit), strip code comments, increase pruning to 5%
+- [x] 04-01-PLAN.md -- Verify differentiators (SmearGate, U-Net, OrthoInit), strip code comments, increase pruning to 5%
 - [ ] 04-02-PLAN.md -- Submit SLURM training job, validate artifact under 16MB and BPB <= 1.145
 
 ### Phase 5: Moonshot Exploration
@@ -126,6 +126,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 1. Infrastructure and Baseline | 3/3 | Complete | 2026-03-23 |
 | 2. SOTA Stack Integration | 3/3 | Complete | 2026-03-23 |
 | 3. Mixed-Precision Quantization | 2/2 | Complete | 2026-03-23 |
-| 4. Differentiator Stack | 0/2 | In Progress | - |
+| 4. Differentiator Stack | 1/2 | In Progress | - |
 | 5. Moonshot Exploration | 0/4 | Not started | - |
 | 6. Submission Hardening | 0/2 | Not started | - |
