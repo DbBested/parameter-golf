@@ -2,15 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready to plan
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-03-23T07:51:19.349Z"
+status: Executing Phase 05
+stopped_at: 05-01-PLAN.md checkpoint (Task 2 - awaiting SLURM results)
+last_updated: "2026-03-23T08:15:00Z"
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 10
+  total_plans: 14
   completed_plans: 10
-  percent: 90
 ---
 
 # Project State
@@ -20,22 +19,20 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-22)
 
 **Core value:** Achieve the lowest possible BPB score within the 16MB artifact + 10-minute training constraint
-**Current focus:** Phase 04 -- differentiator-stack
+**Current focus:** Phase 05 — moonshot-exploration
 
 ## Current Position
 
-Phase: 5
-Plan: Not started
-
-Progress: [█████████████████░░] 9/10 plans complete (90%)
+Phase: 05 (moonshot-exploration) — EXECUTING
+Plan: 1 of 4 (checkpoint: awaiting int4 SLURM job 10823707 results)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 9
-- Average duration: 16 min
-- Total execution time: 2.1 hours
+- Total plans completed: 10
+- Average duration: 15 min
+- Total execution time: 2.2 hours
 
 **By Phase:**
 
@@ -45,10 +42,11 @@ Progress: [█████████████████░░] 9/10 plans
 | 02-sota-stack-integration | 3/3 | 6min | 3min |
 | 03-mixed-precision-quantization | 2/2 | 4min | 2min |
 | 04-differentiator-stack | 1/2 | 7min | 7min |
+| 05-moonshot-exploration | 1/4 | 5min | 5min |
 
 **Recent Trend:**
 
-- Last 5 plans: 02-01 (4min), 02-02 (2min), 02-03 (?), 03-01 (2min), 04-01 (7min)
+- Last 5 plans: 02-02 (2min), 02-03 (?), 03-01 (2min), 04-01 (7min), 05-01 (5min)
 - Trend: Fast execution; code-only changes complete in under 10 minutes
 
 *Updated after each plan completion*
@@ -80,10 +78,13 @@ Recent decisions affecting current work:
 - 04-01: Magnitude pruning increased from 3% to 5% for better zstd compression (expected 0.001-0.002 BPB cost)
 - 04-01: train_gpt.py stripped from 62,489 to 53,995 bytes (-13.6%); 1,259 lines (from 1,452)
 - 04-01: Removed per-layer quantization sensitivity logging (Phase 3 diagnostic, no longer needed)
+- 05-01: Int4 experiment uses copy-and-modify pattern in repo/experiments/ to isolate from base model
+- 05-01: SLURM job 10823707 submitted for int4 MLP (clip_range 7) single-seed screening run
 
 ### Pending Todos
 
 - Submit Phase 4 validation SLURM job and validate artifact under 16MB and BPB <= 1.145 (Plan 04-02)
+- Evaluate int4 moonshot SLURM job 10823707 results for go/no-go decision (Plan 05-01, Task 2)
 
 ### Blockers/Concerns
 
@@ -111,6 +112,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-23T07:18:53Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-03-23T08:15:00Z
+Stopped at: 05-01-PLAN.md checkpoint (Task 2 - awaiting SLURM job 10823707 results)
 Resume file: None
