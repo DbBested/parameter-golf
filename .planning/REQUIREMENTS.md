@@ -29,7 +29,7 @@ Requirements for the competition campaign. Each maps to roadmap phases.
 
 ### Quantization
 
-- [ ] **QUANT-01**: Int6 QAT with Straight-Through Estimator (STE) for all weight matrices as baseline quantization
+- [ ] **QUANT-01**: Int6 post-training quantization (PTQ) with per-row scaling for all weight matrices (research found SOTA uses PTQ, not QAT — QAT explored in Phase 3 if needed)
 - [ ] **QUANT-02**: Mixed-precision quantization: int5 for MLP weights, int6 for attention weights, FP16 for embeddings
 - [ ] **QUANT-03**: zstd level 22 compression of quantized weights with bit-packing
 - [ ] **QUANT-04**: 3% magnitude pruning post-training to improve compression ratio

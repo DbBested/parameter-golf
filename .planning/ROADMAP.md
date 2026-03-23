@@ -53,7 +53,7 @@ Plans:
 Plans:
 - [x] 02-01-PLAN.md -- SOTA architecture: 10L, MLP 3x, BigramHash, SmearGate, OrthoInit, forward_logits
 - [x] 02-02-PLAN.md -- Training pipeline: Muon WD, AdamW, SWA, parameter routing for new modules
-- [ ] 02-03-PLAN.md -- Quantization and eval: int6 PTQ, zstd-22, magnitude pruning, sliding window eval, validation run
+- [x] 02-03-PLAN.md -- Quantization and eval: int6 PTQ, zstd-22, magnitude pruning, sliding window eval, validation run
 
 ### Phase 3: Mixed-Precision Quantization
 **Goal**: Mixed-precision quantization (int5 MLP, int6 attention, FP16 embeddings) frees artifact budget for the 10th layer and pushes BPB toward ~1.14
