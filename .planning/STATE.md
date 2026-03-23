@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Executing Phase 05
-stopped_at: 05-01-PLAN.md checkpoint (Task 2 - awaiting SLURM results)
-last_updated: "2026-03-23T08:15:00Z"
+stopped_at: 05-02-PLAN.md checkpoint (Task 2 - awaiting curriculum SLURM job 10823795 results)
+last_updated: "2026-03-23T08:14:38Z"
 progress:
   total_phases: 6
   completed_phases: 4
@@ -24,15 +24,15 @@ See: .planning/PROJECT.md (updated 2026-03-22)
 ## Current Position
 
 Phase: 05 (moonshot-exploration) — EXECUTING
-Plan: 1 of 4 (checkpoint: awaiting int4 SLURM job 10823707 results)
+Plan: 2 of 4 (checkpoint: awaiting curriculum SLURM job 10823795 results)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 10
-- Average duration: 15 min
-- Total execution time: 2.2 hours
+- Total plans completed: 11
+- Average duration: 14 min
+- Total execution time: 2.3 hours
 
 **By Phase:**
 
@@ -42,11 +42,11 @@ Plan: 1 of 4 (checkpoint: awaiting int4 SLURM job 10823707 results)
 | 02-sota-stack-integration | 3/3 | 6min | 3min |
 | 03-mixed-precision-quantization | 2/2 | 4min | 2min |
 | 04-differentiator-stack | 1/2 | 7min | 7min |
-| 05-moonshot-exploration | 1/4 | 5min | 5min |
+| 05-moonshot-exploration | 2/4 | 9min | 5min |
 
 **Recent Trend:**
 
-- Last 5 plans: 02-02 (2min), 02-03 (?), 03-01 (2min), 04-01 (7min), 05-01 (5min)
+- Last 5 plans: 02-03 (?), 03-01 (2min), 04-01 (7min), 05-01 (5min), 05-02 (4min)
 - Trend: Fast execution; code-only changes complete in under 10 minutes
 
 *Updated after each plan completion*
@@ -80,11 +80,15 @@ Recent decisions affecting current work:
 - 04-01: Removed per-layer quantization sensitivity logging (Phase 3 diagnostic, no longer needed)
 - 05-01: Int4 experiment uses copy-and-modify pattern in repo/experiments/ to isolate from base model
 - 05-01: SLURM job 10823707 submitted for int4 MLP (clip_range 7) single-seed screening run
+- 05-02: Shard difficulty range: 0.4978 (easiest) to 0.5583 (hardest) -- relatively narrow spread
+- 05-02: Curriculum warmup: easy-to-hard for first 30% of steps, then random
+- 05-02: SLURM job 10823795 submitted for curriculum single-seed screening run
 
 ### Pending Todos
 
 - Submit Phase 4 validation SLURM job and validate artifact under 16MB and BPB <= 1.145 (Plan 04-02)
 - Evaluate int4 moonshot SLURM job 10823707 results for go/no-go decision (Plan 05-01, Task 2)
+- Evaluate curriculum moonshot SLURM job 10823795 results for go/no-go decision (Plan 05-02, Task 2)
 
 ### Blockers/Concerns
 
@@ -112,6 +116,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-23T08:15:00Z
-Stopped at: 05-01-PLAN.md checkpoint (Task 2 - awaiting SLURM job 10823707 results)
+Last session: 2026-03-23T08:14:38Z
+Stopped at: 05-02-PLAN.md checkpoint (Task 2 - awaiting SLURM job 10823795 results)
 Resume file: None
