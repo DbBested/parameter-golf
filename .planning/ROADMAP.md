@@ -56,18 +56,18 @@ Plans:
 - [x] 02-03-PLAN.md -- Quantization and eval: int6 PTQ, zstd-22, magnitude pruning, sliding window eval, validation run
 
 ### Phase 3: Mixed-Precision Quantization
-**Goal**: Mixed-precision quantization (int5 MLP, int6 attention, FP16 embeddings) frees artifact budget for the 10th layer and pushes BPB toward ~1.14
+**Goal**: Mixed-precision quantization (int5 MLP, int6 attention, FP16 embeddings) reduces artifact from 18.49MB to under 16MB while maintaining BPB quality near 1.1356
 **Depends on**: Phase 2
 **Requirements**: QUANT-02, QUANT-04, QUANT-05
 **Success Criteria** (what must be TRUE):
   1. Int5 MLP quantization trains stably (no gradient explosion or BPB regression during QAT) as confirmed by per-layer gradient monitoring
   2. Mixed-precision model achieves lower BPB than the uniform int6 model at the same or smaller artifact size
   3. 3% magnitude pruning post-training improves zstd compression ratio without degrading BPB by more than 0.001
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md -- Mixed int5/int6 quantization code change, per-layer MSE logging, SLURM job submission
+- [ ] 03-02-PLAN.md -- Validate training results: artifact size, BPB, sensitivity logging
 
 ### Phase 4: Differentiator Stack
 **Goal**: Architecture enhancements (SmearGate, U-Net skips, OrthoInit) are individually ablated and the best combination is integrated, matching or beating current SOTA ~1.14 BPB
