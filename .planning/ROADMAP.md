@@ -92,13 +92,13 @@ Plans:
   2. LoRA TTT provides measurable BPB improvement (>0.002) on top of the best base model while completing within the eval time budget and complying with competition rules
   3. Each moonshot direction has a clear go/no-go result: either integrated into the best model or documented as not competitive with quantified evidence
   4. The best model configuration (base + any successful moonshots) achieves BPB < 1.135
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
-- [ ] 05-03: TBD
-- [ ] 05-04: TBD
+- [ ] 05-01-PLAN.md -- Int4 MLP quantization experiment (clip_range 15->7, one-line change)
+- [ ] 05-02-PLAN.md -- Curriculum learning experiment (shard difficulty scoring, easy-to-hard ordering)
+- [ ] 05-03-PLAN.md -- LoRA TTT experiment (eval-time adaptation on already-scored tokens)
+- [ ] 05-04-PLAN.md -- Depth recurrence experiment (5 blocks x 2 loops, Huginn-style adapter re-injection)
 
 ### Phase 6: Submission Hardening
 **Goal**: The final model is validated as reproducible, rule-compliant, and competition-ready with a complete submission package tested on RunPod 8xH100
