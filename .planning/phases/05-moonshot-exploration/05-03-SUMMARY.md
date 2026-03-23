@@ -92,13 +92,23 @@ None
 ## User Setup Required
 None - no external service configuration required.
 
+## Experiment Results (SLURM Job 10825017)
+
+| Metric | Standard Eval | TTT Eval | Delta |
+|--------|--------------|----------|-------|
+| BPB | 1.1422 | 1.2529 | +0.1107 (MUCH WORSE) |
+| Eval time | 194s | 87s | - |
+| Artifact | 16,229,272 | - | Over 16MB cap |
+
+## Go/No-Go Decision: **NO-GO**
+
+LoRA TTT dramatically worsened BPB (+0.11 regression). The eval-time adaptation overfits to individual documents and loses global knowledge. The standard sliding window eval is already highly optimized. TTT is not competitive on a strong base model.
+
 ## Next Phase Readiness
-- Awaiting SLURM job 10825017 results for go/no-go decision
-- Go criteria: TTT BPB improvement >= 0.002 AND TTT eval time < 300s (5 minutes)
-- No-go criteria: TTT improvement < 0.001 OR eval time > 600s
-- If go: TTT eval can be integrated into the final submission
-- If no-go: Document as not competitive at this base model quality
+- TTT moonshot concluded with NO-GO
+- No changes integrated into base model
+- Standard sliding window eval confirmed optimal
 
 ---
 *Phase: 05-moonshot-exploration*
-*Completed: 2026-03-23 (checkpoint)*
+*Completed: 2026-03-23*
