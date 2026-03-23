@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Executing Phase 05
-stopped_at: 05-02-PLAN.md checkpoint (Task 2 - awaiting curriculum SLURM job 10823795 results)
-last_updated: "2026-03-23T08:14:38Z"
+stopped_at: 05-03-PLAN.md checkpoint (Task 2 - awaiting TTT SLURM job 10825017 results)
+last_updated: "2026-03-23T08:51:00Z"
 progress:
   total_phases: 6
   completed_phases: 4
@@ -19,20 +19,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-22)
 
 **Core value:** Achieve the lowest possible BPB score within the 16MB artifact + 10-minute training constraint
-**Current focus:** Phase 05 — moonshot-exploration
+**Current focus:** Phase 05 -- moonshot-exploration
 
 ## Current Position
 
-Phase: 05 (moonshot-exploration) — EXECUTING
-Plan: 2 of 4 (checkpoint: awaiting curriculum SLURM job 10823795 results)
+Phase: 05 (moonshot-exploration) -- EXECUTING
+Plan: 3 of 4 (checkpoint: awaiting TTT SLURM job 10825017 results)
+
+Progress: [##########-###-] ~92% (13/14 plans, checkpoint on 05-03)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 11
-- Average duration: 14 min
-- Total execution time: 2.3 hours
+- Total plans completed: 13
+- Average duration: 12 min
+- Total execution time: 2.4 hours
 
 **By Phase:**
 
@@ -42,11 +44,11 @@ Plan: 2 of 4 (checkpoint: awaiting curriculum SLURM job 10823795 results)
 | 02-sota-stack-integration | 3/3 | 6min | 3min |
 | 03-mixed-precision-quantization | 2/2 | 4min | 2min |
 | 04-differentiator-stack | 1/2 | 7min | 7min |
-| 05-moonshot-exploration | 2/4 | 9min | 5min |
+| 05-moonshot-exploration | 3/4 | 13min | 4min |
 
 **Recent Trend:**
 
-- Last 5 plans: 02-03 (?), 03-01 (2min), 04-01 (7min), 05-01 (5min), 05-02 (4min)
+- Last 5 plans: 03-01 (2min), 04-01 (7min), 05-01 (5min), 05-02 (4min), 05-03 (4min)
 - Trend: Fast execution; code-only changes complete in under 10 minutes
 
 *Updated after each plan completion*
@@ -83,12 +85,16 @@ Recent decisions affecting current work:
 - 05-02: Shard difficulty range: 0.4978 (easiest) to 0.5583 (hardest) -- relatively narrow spread
 - 05-02: Curriculum warmup: easy-to-hard for first 30% of steps, then random
 - 05-02: SLURM job 10823795 submitted for curriculum single-seed screening run
+- 05-03: LoRA TTT targets Q and V projections only (not lm_head due to tied embeddings)
+- 05-03: TTT uses rank=4 LoRA with lr=0.01, chunk_size=256, eval_seq_len=1024, batch_size=64
+- 05-03: SLURM job 10825017 submitted for TTT single-seed screening run (1h time limit)
 
 ### Pending Todos
 
 - Submit Phase 4 validation SLURM job and validate artifact under 16MB and BPB <= 1.145 (Plan 04-02)
 - Evaluate int4 moonshot SLURM job 10823707 results for go/no-go decision (Plan 05-01, Task 2)
 - Evaluate curriculum moonshot SLURM job 10823795 results for go/no-go decision (Plan 05-02, Task 2)
+- Evaluate TTT moonshot SLURM job 10825017 results for go/no-go decision (Plan 05-03, Task 2)
 
 ### Blockers/Concerns
 
@@ -116,6 +122,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-23T08:14:38Z
-Stopped at: 05-02-PLAN.md checkpoint (Task 2 - awaiting SLURM job 10823795 results)
+Last session: 2026-03-23T08:51:00Z
+Stopped at: 05-03-PLAN.md checkpoint (Task 2 - awaiting SLURM job 10825017 results)
 Resume file: None

@@ -97,7 +97,7 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md -- Int4 MLP quantization experiment (clip_range 15->7, one-line change)
 - [x] 05-02-PLAN.md -- Curriculum learning experiment (shard difficulty scoring, easy-to-hard ordering)
-- [ ] 05-03-PLAN.md -- LoRA TTT experiment (eval-time adaptation on already-scored tokens)
+- [x] 05-03-PLAN.md -- LoRA TTT experiment (eval-time adaptation on already-scored tokens)
 - [ ] 05-04-PLAN.md -- Depth recurrence experiment (5 blocks x 2 loops, Huginn-style adapter re-injection)
 
 ### Phase 6: Submission Hardening
@@ -127,5 +127,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 2. SOTA Stack Integration | 3/3 | Complete | 2026-03-23 |
 | 3. Mixed-Precision Quantization | 2/2 | Complete | 2026-03-23 |
 | 4. Differentiator Stack | 1/2 | In Progress | - |
-| 5. Moonshot Exploration | 2/4 | In Progress | - |
+| 5. Moonshot Exploration | 3/4 | In Progress | - |
 | 6. Submission Hardening | 0/2 | Not started | - |
