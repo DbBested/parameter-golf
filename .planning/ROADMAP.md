@@ -100,21 +100,23 @@ Plans:
 - [x] 05-03-PLAN.md -- LoRA TTT experiment (eval-time adaptation on already-scored tokens)
 - [x] 05-04-PLAN.md -- Depth recurrence experiment (5 blocks x 2 loops, Huginn-style adapter re-injection)
 
-### Phase 6: Submission Hardening
-**Goal**: The final model is validated as reproducible, rule-compliant, and competition-ready with a complete submission package tested on RunPod 8xH100
+### Phase 6: Next-Gen Stack + Submission
+**Goal**: Implement the full next-generation technique stack (LeakyReLU(0.5)^2, EMA, GPTQ-lite, 11L, Late QAT, Partial RoPE, XSA, VE128, Legal TTT) to achieve BPB < 1.12 and prepare a competition-winning submission
 **Depends on**: Phase 5
 **Requirements**: SUB-01, SUB-02, SUB-03, SUB-04, SUB-05, EVAL-03
 **Success Criteria** (what must be TRUE):
-  1. Final model achieves < 1.14 BPB on FineWeb validation, beating current SOTA (1.1428)
-  2. Artifact (code + compressed weights) fits within 16,000,000 bytes, verified on the actual submission package
-  3. 5-seed evaluation demonstrates statistical significance (p < 0.01, >0.005 nat improvement over SOTA)
-  4. Training and evaluation both complete within 10 minutes on RunPod 8xH100 SXM
-  5. Complete submission package (train_gpt.py, README.md, submission.json, training logs, requirements.txt) passes all competition validation checks
+  1. Model achieves BPB < 1.12 on FineWeb validation with the full next-gen stack
+  2. Artifact (code + compressed weights) fits within 16,000,000 bytes
+  3. 3-seed evaluation demonstrates statistical significance (p < 0.01, >0.005 nat improvement over merged SOTA 1.14276)
+  4. Training and evaluation both complete within 10 minutes on 8xH100
+  5. Complete submission package passes all competition validation checks
 **Plans**: TBD
 
 Plans:
 - [ ] 06-01: TBD
 - [ ] 06-02: TBD
+- [ ] 06-03: TBD
+- [ ] 06-04: TBD
 
 ## Progress
 
