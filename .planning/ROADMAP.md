@@ -12,7 +12,7 @@ This roadmap takes us from zero to a competition-winning submission by building 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Infrastructure and Baseline** - Measurement foundation, baseline reproduction, automated safety checks
+- [x] **Phase 1: Infrastructure and Baseline** - Measurement foundation, baseline reproduction, automated safety checks
 - [ ] **Phase 2: SOTA Stack Integration** - Proven technique stack targeting ~1.15 BPB
 - [ ] **Phase 3: Mixed-Precision Quantization** - Int5 MLP quantization and compression optimization
 - [ ] **Phase 4: Differentiator Stack** - SmearGate, U-Net skips, orthogonal init for marginal gains
@@ -35,8 +35,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md -- Environment setup, repo clone, data download, experiment tracking, storage management
-- [ ] 01-02-PLAN.md -- Baseline training, BPB validation, artifact size checking
-- [ ] 01-03-PLAN.md -- Multi-seed evaluation, timing calibration, ablation framework
+- [x] 01-02-PLAN.md -- Baseline training, BPB validation, artifact size checking
+- [x] 01-03-PLAN.md -- Multi-seed evaluation, timing calibration, ablation framework
 
 ### Phase 2: SOTA Stack Integration
 **Goal**: A competitive model implementing all table-stakes techniques achieves ~1.15 BPB, matching the lower tier of leaderboard submissions
