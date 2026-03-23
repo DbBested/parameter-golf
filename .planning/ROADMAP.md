@@ -66,7 +66,7 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md -- Mixed int5/int6 quantization code change, per-layer MSE logging, SLURM job submission
+- [x] 03-01-PLAN.md -- Mixed int5/int6 quantization code change, per-layer MSE logging, SLURM job submission
 - [ ] 03-02-PLAN.md -- Validate training results: artifact size, BPB, sensitivity logging
 
 ### Phase 4: Differentiator Stack
@@ -124,8 +124,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Infrastructure and Baseline | 3/3 | Complete | 2026-03-23 |
-| 2. SOTA Stack Integration | 2/3 | In Progress | - |
-| 3. Mixed-Precision Quantization | 0/2 | Not started | - |
+| 2. SOTA Stack Integration | 3/3 | Complete | 2026-03-23 |
+| 3. Mixed-Precision Quantization | 1/2 | In Progress | - |
 | 4. Differentiator Stack | 0/2 | Not started | - |
 | 5. Moonshot Exploration | 0/4 | Not started | - |
 | 6. Submission Hardening | 0/2 | Not started | - |
