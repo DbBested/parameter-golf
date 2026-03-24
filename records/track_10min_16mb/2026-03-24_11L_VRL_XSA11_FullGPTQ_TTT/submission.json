@@ -1,0 +1,28 @@
+{
+  "name": "11L VRL + XSA-11 + Full GPTQ + LeakyReLU² + Score-First TTT",
+  "github_id": "DbBested",
+  "val_bpb": "FILL_IN_AFTER_RUNPOD",
+  "val_bpb_seeds": {
+    "1337": "FILL_IN",
+    "42": "FILL_IN",
+    "7": "FILL_IN"
+  },
+  "val_bpb_ttt": "FILL_IN",
+  "hardware": "8xH100 SXM",
+  "training_time_seconds": 600,
+  "artifact_bytes": "FILL_IN",
+  "techniques": [
+    "11L transformer, 512 dim, GQA 8/4",
+    "Value Residual Learning (VRL) — layer-0 V blended via sigmoid gates",
+    "XSA on all 11 layers (Exclusive Self Attention)",
+    "Full GPTQ (Hessian-calibrated column-wise quantization)",
+    "QAT-Export alignment (quantile 0.9995 STE clipping)",
+    "LeakyReLU(0.5)² activation",
+    "Score-first TTT (AdamW lr=1e-4, 3 epochs, 131K chunks, T=0.98)",
+    "FlashAttention-3 via flash_attn_interface",
+    "EMA(0.997) weight averaging",
+    "SmearGate + BigramHash(2048) + U-Net skips + Partial RoPE(16/64)",
+    "Int6 QAT + zstd-22 compression + 3% magnitude pruning"
+  ],
+  "base": "Built on merged SOTA #1 (signalrush, 1.1228 BPB)"
+}
