@@ -1265,31 +1265,34 @@ def mixed_quantize_int6(state_dict: dict[str, Tensor], int6_cats: set[str],
         q_keys = [k for k in result if k.endswith(".q") and result[k].dtype == torch.int8]
         if q_keys:
             total_weights = sum(result[k].numel() for k in q_keys)
-            target_pruned = int(prune_pct * total_weights)
-            # Count weights at each absolute value level
-            counts = torch.zeros(32, dtype=torch.int64)
-            for k in q_keys:
-                for v in range(32):
-                    counts[v] += (result[k].abs() == v).sum().item()
-            # Find smallest threshold that prunes enough NON-ZERO weights
-            # Pre-existing zeros don't help compression (already zero)
-            existing_zeros = counts[0].item()
-            cumsum = existing_zeros
-            threshold = 0
-            for v in range(1, 32):
-                if cumsum >= target_pruned + existing_zeros:
-                    break
-                cumsum += counts[v].item()
-                threshold = v
-            # Apply pruning at this threshold
-            total_pruned = 0
-            for k in q_keys:
-                mask = result[k].abs() <= threshold
-                total_pruned += mask.sum().item()
-                result[k][mask] = 0
-            newly_pruned = total_pruned - existing_zeros
-            print(f"prune:zeroed {total_pruned}/{total_weights} ({100*total_pruned/total_weights:.1f}%) "
-                  f"threshold={threshold} newly_pruned={newly_pruned}")
+            target_new_zeros = int(prune_pct * total_weights)
+            # Count existing zeros and |value|=1 weights
+            existing_zeros = sum((result[k] == 0).sum().item() for k in q_keys)
+            ones_count = sum((result[k].abs() == 1).sum().item() for k in q_keys)
+            if target_new_zeros <= 0:
+                pass
+            elif target_new_zeros <= ones_count:
+                # Randomly prune a subset of |value|=1 weights
+                torch.manual_seed(42)
+                pruned = 0
+                for k in q_keys:
+                    ones_mask = result[k].abs() == 1
+                    n_ones = ones_mask.sum().item()
+                    if n_ones == 0:
+                        continue
+                    # Fraction of |1| weights to prune in this tensor
+                    frac = target_new_zeros / ones_count
+                    rand_mask = torch.rand(result[k].shape) < frac
+                    prune_mask = ones_mask & rand_mask
+                    pruned += prune_mask.sum().item()
+                    result[k][prune_mask] = 0
+                print(f"prune:partial zeroed {pruned} of {ones_count} |val|=1 weights "
+                      f"({100*pruned/total_weights:.1f}% of total, target was {target_new_zeros})")
+            else:
+                # Need to prune all |value|=1 and some |value|=2
+                for k in q_keys:
+                    result[k][result[k].abs() <= 1] = 0
+                print(f"prune:zeroed all |val|<=1 ({ones_count + existing_zeros}/{total_weights})")
     return result, meta
 def dequantize_mixed_int6(result: dict[str, Tensor], meta: dict[str, object],
                           template_sd: dict[str, Tensor]) -> dict[str, Tensor]:
