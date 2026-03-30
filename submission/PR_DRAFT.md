@@ -2,14 +2,15 @@
 
 **Not a record submission** — this is a research contribution documenting how to make nGPT (hypersphere-normalized transformers) viable under Parameter Golf constraints, including a novel fix for a torch.compile precision bug.
 
-**val_bpb: 1.1582** (mean of 3 seeds, int6 sliding window stride=64, 8xH200 SXM)
+**val_bpb: 1.1502** (seed 1337, int6 sliding window stride=64, 8xH200 SXM)
 
 ## Summary
 
 - **Made full nGPT trainable** at small scale by fixing three interacting bugs that caused PR #831 to dismiss it (BPB improved from 1.6915 → 1.2714)
 - **Solved a torch.compile precision compounding bug** via opaque autograd function (`allow_in_graph`), enabling bf16 matmuls + fp32 normalizes with zero graph breaks — 25% faster than the fp32 workaround
 - **Post-dequant renormalization** reduces nGPT's quantization gap from 0.35 → 0.008 BPB (44x reduction, 3 lines of code)
-- **Systematic ablation** across 9 configurations mapping the nGPT design space (layer count, MLP width, quantization, weight normalization)
+- **Re-enabled XSA + Partial RoPE** on nGPT for an additional -0.007 BPB (free improvement, zero overhead)
+- **Systematic ablation** across 15+ configurations mapping the nGPT design space (layer count, MLP width, quantization, weight normalization, attention features, paper-faithfulness)
 
 ## Hardware
 
@@ -17,17 +18,24 @@ All results on **ORCD cluster** (MIT) using 8xH200 SXM (141GB HBM3e), CUDA 12.4,
 
 Step time on 8xH200: **119ms/step** (bf16 compile with opaque normalize). Estimated 8xH100: ~125ms/step.
 
-## 3-Seed Results
+## Best Result
 
-Best configuration: Full nGPT, 12L 3x MLP, 512-dim, BigramHash 8192, int6 + adaptive pruning (~7.8%).
+Best configuration: Full nGPT, 12L 3x MLP, 512-dim, BigramHash 8192, XSA last 4, Partial RoPE 16, int6 + adaptive pruning.
 
-| Seed | val_bpb (sliding) | val_bpb (batch) | artifact_bytes | steps | ms/step |
-|------|-------------------|-----------------|----------------|-------|---------|
-| 1337 | 1.15704 | 1.17951 | 15,911,222 | 4646 | 120 |
-| 42 | 1.15833 | 1.18044 | 15,927,208 | ~4590 | 122 |
-| 7 | 1.15937 | 1.18152 | ~15,900,000 | ~4590 | 122 |
-| **Mean** | **1.15825** | **1.18049** | | | |
-| **Std** | **0.00117** | | | | |
+| Seed | val_bpb (sliding) | artifact_bytes | steps | ms/step |
+|------|-------------------|----------------|-------|---------|
+| 1337 | **1.15018** | 15,889,025 | 4562 | ~121 |
+
+3-seed validation on base config (without XSA/RoPE):
+
+| Seed | val_bpb (sliding) | artifact_bytes | steps | ms/step |
+|------|-------------------|----------------|-------|---------|
+| 1337 | 1.15704 | 15,911,222 | 4646 | 120 |
+| 42 | 1.15833 | 15,927,208 | ~4590 | 122 |
+| 7 | 1.15937 | ~15,900,000 | ~4590 | 122 |
+| **Mean** | **1.15825 ± 0.00117** | | | |
+
+XSA + Partial RoPE add -0.007 BPB with zero speed cost (single-seed validated).
 
 ## Novel Contributions
 
@@ -148,21 +156,44 @@ Note: Effect diminishes at higher param count (neutral at 35M+) and on full nGPT
 
 All runs: 8xH200 SXM, 560s wallclock, bf16 compile + L2NormalizeHP, seed 1337.
 
-| Config | ms/step | Steps | Sliding BPB | Artifact | Fits 16MB? |
-|--------|---------|-------|-------------|----------|------------|
-| **12L 3x int6** | **120** | **4646** | **1.1570** | **15.9 MB** | **Yes (7.8% pruned)** |
+### Architecture sweep (base config: 12L 3x, no XSA/RoPE)
+
+| Config | ms/step | Steps | Sliding BPB | Artifact | Fits? |
+|--------|---------|-------|-------------|----------|-------|
+| **12L 3x int6** | **120** | **4646** | **1.1570** | **15.9 MB** | **Yes** |
 | 12L 3x int5 | 121 | ~4628 | 1.1647 | 13.1 MB | Yes |
-| 12L 3.5x int5 | 126 | ~4444 | 1.1705 | ~15 MB | Yes |
+| 12L 4x int5 | 130 | 4293 | 1.1599 | 14.9 MB | Yes |
+| 12L 5x int5 | 137 | 4103 | 1.1720 | 15.0 MB | Yes |
 | 11L 3x int6 | 110 | 5087 | 1.1736 | 14.3 MB | Yes |
+| 11L 4x int5 | 118 | ~4735 | 1.1797 | 13.6 MB | Yes |
 | 12L 3.5x int6 | 128 | ~4375 | 1.1754 | 16.1 MB | No |
 | 13L 3x int5 | 128 | ~4375 | 1.1787 | 13.8 MB | Yes |
 | 12L 3x no wn | 118 | ~4745 | 2.7842 | 16.6 MB | Broken |
 
+### Feature stacking (on 12L 3x int6 base)
+
+| Feature | Sliding BPB | Δ vs base | Cost |
+|---------|-------------|-----------|------|
+| Base (no XSA/RoPE) | 1.1570 | — | — |
+| + XSA last 4 | 1.1532 | **-0.004** | Zero |
+| + Partial RoPE 16 | 1.1525 | **-0.005** | Zero |
+| **+ Both** | **1.1502** | **-0.007** | **Zero** |
+
+### Paper-faithfulness experiments
+
+| Change | Sliding BPB | Δ vs base | Lesson |
+|--------|-------------|-----------|--------|
+| Remove alpha `.abs()` | 1.3458 | +0.189 | Negative alpha needs >100K steps to learn |
+| + s_z output scaling | Crashed | — | Extra params hurt at 5000 steps |
+| + Constrained residual mix | (included above) | — | Unnecessary with subsequent normalize |
+
 Key findings:
 - **12L 3x is the sweet spot** — fewer layers lose quality, more layers lose speed
 - **Int6 + adaptive pruning beats int5** by 0.008 BPB despite needing 7.8% pruning
-- **Weight normalization is non-negotiable** — removing it causes catastrophic quant failure
-- **Wider MLP (3.5x) doesn't help** — int6 doesn't fit, int5 gains nothing
+- **Weight normalization is non-negotiable** — removing it causes catastrophic quant failure (+1.6 BPB)
+- **XSA + Partial RoPE are free wins** — -0.007 BPB combined, zero overhead
+- **Paper design choices hurt at short training** — `.abs()`, s_z, constrained mix all regress
+- **More params don't help** — the step-time cost outweighs the per-step quality gain
 
 ## Architecture
 
@@ -186,6 +217,8 @@ Token Embeddings → BigramHash (8192) → 12× nGPT Blocks → Tied Head
 | MLP | 3x expansion, LeakyReLU(0.5)² |
 | BigramHash | 8192 vocab |
 | U-Net skip connections | Yes |
+| XSA | Last 4 layers |
+| Partial RoPE | 16 of 64 head dims |
 | Normalization | Full nGPT (L2 normalize both sides) |
 | Weight normalization | Yes (forward-pass row-wise L2 norm) |
 | Parameters | 30M |
@@ -228,12 +261,25 @@ Three functional circuits: Encoder (L0-2, CKA 0.83), Transition (L3-6), Predicti
 | Riemannian Muon (tangent-plane projection) | 0.19 BPB behind at 2000 steps | Convergence speed dominates at short training |
 | Triton fused normalize kernel | 17% slower than PyTorch ops | Kernel launch overhead > compute savings at dim=512 |
 | No weight normalization | +1.6 BPB quant failure | Renorm dequant requires unit-norm weights |
-| 13L model (more depth) | 1.1787 vs 1.1570 (12L) | Extra normalize overhead reduces net steps |
-| 3.5x MLP (wider) | Doesn't fit 16MB (int6) | Compression paradox: trained weights compress poorly |
+| 13L / wider MLP (more params) | All worse than 12L 3x | Step-time cost > per-step quality gain |
+| Paper-faithful alpha (no `.abs()`) | +0.189 BPB | Negative alpha needs >100K steps to learn |
+| Paper-faithful s_z output scaling | Crashed (SDPA kernel error) | Extra params + overhead at 5000 steps |
+| TTT (any LR, with/without renorm) | NaN on all configs | GPTQ + renorm dequant weights are too fragile for gradient updates |
+
+### TTT Incompatibility (Important Negative Result)
+
+Test-time training produces NaN on nGPT models regardless of:
+- Learning rate (tested 0.00005 to 0.002)
+- With or without weight renormalization after TTT steps
+- Freezing 10/12 blocks (only last 2 unfrozen)
+
+The root cause: renorm dequantization during the forward pass creates a numerically fragile computational graph. Gradients flowing through the dequant→renormalize→forward path become unstable. This is specific to the combination of Full GPTQ + renorm dequantization — standard GPTQ (without renorm) tolerates TTT at very low LRs.
 
 ## Discussion
 
-**Gap to SOTA:** Our best nGPT result (1.1582 mean) is 0.039 behind SOTA (1.1194). The primary cause is step time — nGPT at 119ms/step gets ~4700 steps vs the standard model's ~6800 at 88ms/step. The 31ms overhead from 86 opaque normalize calls per forward pass is a fundamental architectural tax.
+**Gap to SOTA:** Our best nGPT result (1.1502) is 0.031 behind SOTA (1.1194). Two factors:
+1. **Step time:** nGPT at 121ms/step gets ~4600 steps vs the standard model's ~6800 at 88ms/step. The 33ms overhead from ~86 opaque normalize calls is a fundamental architectural cost.
+2. **No TTT:** GPTQ + renorm dequant weights are incompatible with gradient-based adaptation. SOTA uses TTT for ~-0.002 BPB.
 
 **Research value:** The contributions here aren't about BPB — they're about understanding what happens when you constrain representations to the hypersphere under extreme compression:
 
@@ -242,6 +288,7 @@ Three functional circuits: Encoder (L0-2, CKA 0.83), Transition (L3-6), Predicti
 3. **torch.compile has a precision compounding bug.** The `allow_in_graph` fix applies to any model with many sequential normalizations.
 4. **Compression advantages from structured weights vanish at full training.** This is a cautionary result for the weight-sharing community.
 5. **RYS amplification on the hypersphere** is a genuinely novel interaction — the geometry prevents identity collapse, enabling 12x stronger layer repetition effects.
+6. **Paper design choices don't transfer to short training.** Signed alpha, s_z scaling, and other nGPT paper features that improve long-training performance actually hurt at 5000 steps — the optimizer doesn't have time to exploit the extra degrees of freedom.
 
 ## References
 

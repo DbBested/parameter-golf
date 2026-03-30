@@ -762,7 +762,8 @@ class Block(nn.Module):
         x_in = mix[0][None, None, :] * x + mix[1][None, None, :] * x0
         if self.ngpt:
             if self._ngpt_full:
-                # Full nGPT (paper-faithful): normalize both sides with abs(alpha)
+                # Full nGPT: normalize both sides, abs(alpha) for fast convergence at short training
+                # Note: paper allows negative alpha but this hurts at <5000 steps (tested: +0.19 BPB)
                 h_norm = normalize_hp(x_in)
                 attn_out, v_out = self.attn(h_norm, v_embed=v_embed, v_residual=v_residual)
                 attn_norm = normalize_hp(attn_out)
@@ -1290,7 +1291,7 @@ def eval_val_sliding_ttt(
                         torch.nn.utils.clip_grad_norm_(ttt_params, args.ttt_grad_clip)
                         optimizer.step()
                         # nGPT: renormalize weights after TTT step to stay on sphere
-                        if args.ngpt_enabled:
+                        if args.ngpt_enabled and not bool(int(os.environ.get("TTT_NO_RENORM", "0"))):
                             with torch.no_grad():
                                 for p in ttt_params:
                                     if p.ndim == 2:
